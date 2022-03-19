@@ -85,8 +85,7 @@ func (suite *PubsubSuite) TestPublish() {
 	ch := make(chan []byte, 10)
 
 	// add a few subscribers
-	// we are going to cheat and use a single channel
-	// for all subscribers
+	// we are going to cheat and use a single channel for all subscribers
 	for i := 0; i < 3; i++ {
 		id := uuid.New().String()
 		_ = inst.Subscribe(id, ch)

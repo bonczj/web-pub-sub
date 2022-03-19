@@ -22,7 +22,6 @@ func init() {
 
 // main initializes the web server used by this project.
 func main() {
-	// rewrite with Gorilla/mux so we can define method (POST/GET)
 	r := mux.NewRouter()
 
 	r.HandleFunc("/publish", handlers.Publish).Methods(http.MethodPost)
@@ -69,13 +68,10 @@ func main() {
 	os.Exit(0)
 }
 
-// middleware does not really do much for this program, but
-// would be where we wire in things like authentication
+// accessLog prints each request to a log to simulate an access log.
 func accessLog(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		// print log r.Method and r.URL.Path
 		log.Printf("%s %s", r.Method, r.URL.Path)
-		// inject the context in http.Request with r.WithContext
 		next.ServeHTTP(rw, r)
 	})
 }

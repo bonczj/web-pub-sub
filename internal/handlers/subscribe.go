@@ -17,11 +17,7 @@ const (
 )
 
 // Subscribe registers a client as wanting to subscribe to new messages.
-// Any new published message will be sent to the client. In order to receive
-// multiple messages and not miss any due to potential reconnections,
-// the subscribe method will attempt to establish a connection over a web
-// socket. This will allow messages to flow more freely to the remote
-// subscriber.
+// Any new published message will be sent to the client.
 //
 // Subscribers can request converting an HTTP connection to a web socket
 // connection. If the upgrade is requested and works, stream messages
@@ -46,7 +42,6 @@ func Subscribe(w http.ResponseWriter, r *http.Request) {
 		}
 		defer c.Close()
 
-		// web socket upgrade worked, so send messages over that channel
 		relayWebSocketMessages(c, ch)
 	} else {
 		relayHttpMessages(w, ch)
@@ -72,7 +67,6 @@ func relayHttpMessages(w http.ResponseWriter, ch chan []byte) {
 	w.Header().Set(ContentTypeHeader, ContentTypeTextPlain)
 	w.WriteHeader(http.StatusAccepted)
 
-	// wait for any incoming messages to print out
 	for {
 		msg, ok := <-ch
 		if !ok {
