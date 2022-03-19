@@ -31,8 +31,12 @@ func Subscribe(w http.ResponseWriter, r *http.Request) {
 	ch := make(chan []byte, 10)
 	instance := pubsub.Instance()
 
-	instance.Subscribe(id, ch)
+	err := instance.Subscribe(id, ch)
 	defer instance.Unsubscribe(id)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
 	if websocket.IsWebSocketUpgrade(r) {
 		u := websocket.Upgrader{}

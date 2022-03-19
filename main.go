@@ -60,7 +60,10 @@ func main() {
 
 	// Doesn't block if no connections, but will otherwise wait
 	// until the timeout deadline.
-	srv.Shutdown(ctx)
+	err := srv.Shutdown(ctx)
+	if err != nil {
+		log.Printf("error while shutting down HTTP server: %s", err)
+	}
 
 	log.Println("shutting down")
 	os.Exit(0)

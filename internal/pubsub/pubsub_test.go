@@ -26,7 +26,7 @@ func (suite *PubsubSuite) TestSingleton() {
 	for i := 0; i < 10; i++ {
 		id := uuid.New().String()
 		ch := make(chan []byte)
-		inst.Subscribe(id, ch)
+		_ = inst.Subscribe(id, ch)
 	}
 
 	inst2 := Instance()
@@ -45,8 +45,8 @@ func (suite *PubsubSuite) TestSubscribeSameId() {
 	id := uuid.New().String()
 	ch := make(chan []byte)
 
-	inst.Subscribe(id, ch)
-	inst.Subscribe(id, ch)
+	_ = inst.Subscribe(id, ch)
+	_ = inst.Subscribe(id, ch)
 	suite.Equal(1, len(inst.Subscribers))
 }
 
@@ -57,7 +57,7 @@ func (suite *PubsubSuite) TestUnsubscribe() {
 	for i := 0; i < 10; i++ {
 		id := uuid.New().String()
 		ch := make(chan []byte)
-		inst.Subscribe(id, ch)
+		_ = inst.Subscribe(id, ch)
 		inst.Unsubscribe(id)
 	}
 
@@ -71,7 +71,7 @@ func (suite *PubsubSuite) TestClear() {
 	for i := 0; i < 10; i++ {
 		id := uuid.New().String()
 		ch := make(chan []byte)
-		inst.Subscribe(id, ch)
+		_ = inst.Subscribe(id, ch)
 	}
 
 	suite.Equal(10, len(inst.Subscribers))
@@ -89,7 +89,7 @@ func (suite *PubsubSuite) TestPublish() {
 	// for all subscribers
 	for i := 0; i < 3; i++ {
 		id := uuid.New().String()
-		inst.Subscribe(id, ch)
+		_ = inst.Subscribe(id, ch)
 	}
 
 	// publish several messages
